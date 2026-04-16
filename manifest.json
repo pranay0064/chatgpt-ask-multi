@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Ask ChatGPT Multi",
+  "version": "0.2.0",
+  "description": "Queue multiple questions into the same ChatGPT conversation. They fire one after another into the current chat — no side panel, no API key.",
+  "host_permissions": ["https://chatgpt.com/*", "https://chat.openai.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*", "https://chat.openai.com/*"],
+      "js": ["src/content.ts"],
+      "css": ["src/widget.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
