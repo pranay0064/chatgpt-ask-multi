@@ -19,9 +19,23 @@ With this extension you just select → Ask ChatGPT → select → Ask ChatGPT �
 
 ---
 
-## Install (from source)
+## Install
 
-Until this is on the Chrome Web Store, it installs as an unpacked extension:
+### Quick (pre-built zip, no Node required)
+
+1. Go to the [**Releases**](https://github.com/pranay0064/chatgpt-ask-multi/releases) page and download `ask-chatgpt-multi-vX.Y.Z.zip`
+2. Unzip it to a folder you'll keep around (e.g. `~/chrome-extensions/ask-chatgpt-multi/`)
+3. In Chrome, visit `chrome://extensions`
+4. Toggle **Developer mode** on (top right)
+5. Click **Load unpacked** → pick the unzipped folder
+6. Open [chatgpt.com](https://chatgpt.com) — done
+
+Works in Chrome, Edge, Brave, and other Chromium browsers. Firefox/Safari not tested.
+
+### Build from source
+
+<details>
+<summary>If you want to hack on it or verify the build</summary>
 
 ```bash
 git clone https://github.com/pranay0064/chatgpt-ask-multi.git
@@ -30,16 +44,9 @@ npm install
 npm run build
 ```
 
-Then in Chrome:
+Then in Chrome: `chrome://extensions` → Developer mode → **Load unpacked** → pick `dist/`.
 
-1. Visit `chrome://extensions`
-2. Toggle **Developer mode** on (top right)
-3. Click **Load unpacked**
-4. Select the `dist/` folder inside the project
-
-Open [chatgpt.com](https://chatgpt.com) — you're set. There's no icon bar popup; the extension just enhances the page.
-
-Works in Chrome, Edge, Brave, and other Chromium browsers. Firefox/Safari not tested.
+</details>
 
 ---
 
