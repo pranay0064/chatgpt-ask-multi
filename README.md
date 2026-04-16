@@ -1,8 +1,8 @@
-# Ask ChatGPT Multi
+# Ask ChatGPT Multi — inline composer (V2)
 
-Chrome extension that adds a floating **Multi-Ask** widget on chatgpt.com. Queue as many questions as you want, then hit **Send queue** — each one fires into the current chat as a normal follow-up, one after another.
+Chrome extension that extends chatgpt.com's built-in **"Ask ChatGPT"** popup. Instead of overwriting the composer's single quote reference, it **appends** each selection you quote into the composer as a markdown blockquote and drops the cursor on the next line — so you can build up a multi-quote, multi-comment message and send it yourself when you're ready.
 
-No side panel. No new tabs. No API key. Every question lands in the same conversation you're already in.
+No widget. No side panel. No new tabs. No API key.
 
 ## Install (dev)
 
@@ -15,23 +15,42 @@ Then in Chrome:
 
 1. `chrome://extensions` → enable **Developer mode**
 2. **Load unpacked** → pick `dist/`
-3. Open chatgpt.com — the Multi-Ask widget docks bottom-right
+3. Open chatgpt.com
 
 ## Use
 
-1. Type a question in the widget → **Add** (or ⌘/Ctrl+Enter)
-2. Repeat for as many as you want
-3. Click **Send queue**
-   - The extension types Q1 into the real composer, clicks Send, waits for the response to finish streaming, then sends Q2, and so on
-4. **Cancel** stops after the current question completes
+1. Select a passage in a ChatGPT reply → click the native **💬 Ask ChatGPT** popup
+2. The composer now contains:
+   ```
+   > your selected passage
+
+   ▮
+   ```
+   (cursor on the blank line)
+3. Type your comment / question for that passage
+4. Select another passage → **Ask ChatGPT** → the composer now looks like:
+   ```
+   > passage 1
+
+   your comment 1
+
+   > passage 2
+
+   ▮
+   ```
+5. Repeat as many times as you want
+6. Hit the normal ChatGPT **Send** button — it goes as one message
+
+**Fallback:** if the native popup doesn't appear for some selection (e.g. selecting outside a message bubble), a small green **📎 Quote** button floats next to the selection. Clicking it does the same thing.
 
 ## How it works
 
 - Content script runs only on `chatgpt.com` / `chat.openai.com`
-- To send: sets the composer text via `execCommand('insertText')` (works with ChatGPT's ProseMirror contenteditable) and clicks the page's own Send button
-- To know when to send the next one: watches the Stop button — when it disappears and the Send button re-enables, the assistant is done
+- Listens for clicks on any button whose label is "Ask ChatGPT" and intercepts them in the capture phase — chatgpt.com's own handler never runs, so no single quote pill appears
+- Reads the composer's current `innerText`, appends `\n\n> <quote>\n\n`, and writes it back via `execCommand('insertText')` (the one reliable way to drive ChatGPT's ProseMirror composer from outside React)
+- Cursor ends up at the end of the inserted text — ready for typing
 
 ## Fragility
 
-- Selectors (`data-testid="send-button"`, `data-testid="stop-button"`, `#prompt-textarea`) can change. If sends stop working, update the selectors in [src/content.ts](src/content.ts).
-- If an assistant response takes longer than 5 minutes, the wait times out — bump `timeoutMs` in `waitForResponseDone`.
+- Selectors (`#prompt-textarea`, the "Ask ChatGPT" popup label) can change with chatgpt.com updates. If anything breaks, the one place to fix is `findComposer` / `isNativeAskButton` at the top of [src/content.ts](src/content.ts).
+- This branch (`feat/inline-composer`) is an alternative to the queue-widget approach on `main` / `feat/combined-send`; pick whichever UX you prefer.
