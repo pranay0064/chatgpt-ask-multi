@@ -17,12 +17,19 @@ function findComposer(): HTMLElement | null {
   );
 }
 
+// Collapse any run of 3+ newlines down to exactly two (i.e. at most one blank
+// line between blocks). ProseMirror's innerText readout can include extra
+// newlines for empty paragraphs, which would otherwise accumulate every time
+// we round-trip through the composer.
+function normalizeBlankLines(text: string): string {
+  return text.replace(/\r\n?/g, '\n').replace(/\n{3,}/g, '\n\n');
+}
+
 function getComposerText(): string {
   const el = findComposer();
   if (!el) return '';
   if (el instanceof HTMLTextAreaElement) return el.value;
-  // innerText preserves visual line breaks between paragraphs, which is what
-  // we want when reading back what the user typed.
+  // innerText preserves visual line breaks between paragraphs.
   return (el as HTMLElement).innerText ?? '';
 }
 
@@ -61,25 +68,28 @@ function setComposerText(text: string): boolean {
   return true;
 }
 
-// Build a blockquote from a possibly-multiline selection.
+// Build a blockquote from a possibly-multiline selection. Internal blank lines
+// in the quote are collapsed so the block stays tight.
 function asBlockquote(quote: string): string {
-  return quote.split('\n').map((l) => `> ${l}`).join('\n');
+  const lines = normalizeBlankLines(quote.trim()).split('\n');
+  return lines.map((l) => (l ? `> ${l}` : '>')).join('\n');
 }
 
 // Append the selected passage to whatever the user already has in the
 // composer, then leave one blank line below it for their next comment.
 //
-//   [existing text, trimmed]
+//   [existing text, normalized + trimmed]
 //
 //   > <new quote>
 //
 //   ▮  ← cursor
 function appendQuoteToComposer(quote: string) {
-  const current = getComposerText();
-  const trimmed = current.replace(/\s+$/, '');
+  const current = normalizeBlankLines(getComposerText()).trim();
   const block = asBlockquote(quote);
-  const combined = trimmed ? `${trimmed}\n\n${block}\n\n` : `${block}\n\n`;
-  setComposerText(combined);
+  const combined = current ? `${current}\n\n${block}\n\n` : `${block}\n\n`;
+  // Guard against anything still sneaking through (e.g. a quote that ends
+  // with its own trailing blanks).
+  setComposerText(normalizeBlankLines(combined));
 }
 
 // ---------- Intercept chatgpt.com's native "Ask ChatGPT" popup ----------
