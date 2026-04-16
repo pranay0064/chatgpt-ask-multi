@@ -114,10 +114,9 @@ function formatMessage(item: QItem): string {
   return `${blockquote}\n\n${q}`;
 }
 
-async function sendOne(item: QItem) {
-  const message = formatMessage(item);
+async function typeAndSend(message: string) {
   if (!setComposerText(message)) throw new Error('composer not found');
-  await sleep(120);
+  await sleep(150);
   for (let i = 0; i < 12; i++) {
     const btn = findSendButton();
     if (btn && !btn.disabled) { btn.click(); return; }
@@ -126,45 +125,49 @@ async function sendOne(item: QItem) {
   throw new Error('send button never enabled');
 }
 
+// Combine every pending queue item into a single message and send it once.
+// Each item is rendered as a quoted block (if it has a quote) followed by its
+// question, separated by blank lines — so the assistant can address all of
+// them in one reply.
+function buildCombinedMessage(items: QItem[]): string {
+  return items.map(formatMessage).join('\n\n');
+}
+
 async function runQueue() {
   if (state.running) return;
-  if (state.items.some((i) => i.status !== 'done' && !i.text.trim())) {
+  const pending = state.items.filter((i) => i.status !== 'done');
+  if (!pending.length) return;
+  if (pending.some((i) => !i.text.trim())) {
     setStatus('Every row needs a question.', true);
     return;
   }
+
   state.running = true;
   state.cancel = false;
+  for (const item of pending) {
+    item.status = 'running';
+    item.error = undefined;
+  }
   render();
+  const label = pending.length === 1 ? '1 question' : `${pending.length} questions`;
+  setStatus(`Sending ${label} as one message…`);
+  log(`→ combined send of ${pending.length} item(s)`);
 
   try {
-    for (let i = 0; i < state.items.length; i++) {
-      const item = state.items[i];
-      if (item.status === 'done') continue;
-      if (state.cancel) break;
-      item.status = 'running';
-      item.error = undefined;
-      render();
-      setStatus(`Sending ${i + 1}/${state.items.length}…`);
-      log(`→ #${i + 1}`, { quote: item.quote?.slice(0, 40), q: item.text.slice(0, 60) });
-      try {
-        await sendOne(item);
-        await waitForResponseDone();
-        item.status = 'done';
-        log(`  ✓ #${i + 1}`);
-        await sleep(400);
-      } catch (e) {
-        item.status = 'error';
-        item.error = (e as Error).message;
-        log(`  ✗`, e);
-        setStatus(`Stopped: ${item.error}`, true);
-        render();
-        break;
-      }
-      render();
+    const combined = buildCombinedMessage(pending);
+    await typeAndSend(combined);
+    await waitForResponseDone();
+    for (const item of pending) item.status = 'done';
+    log(`  ✓ combined send done`);
+    setStatus('Sent.');
+  } catch (e) {
+    const err = (e as Error).message;
+    for (const item of pending) {
+      item.status = 'error';
+      item.error = err;
     }
-    if (!state.cancel && state.items.every((i) => i.status === 'done')) {
-      setStatus('Queue complete.');
-    }
+    log(`  ✗`, e);
+    setStatus(`Error: ${err}`, true);
   } finally {
     state.running = false;
     render();
@@ -263,7 +266,7 @@ function render() {
   cancelBtn.disabled = !state.running;
   clearBtn.disabled = state.running || state.items.length === 0;
   addBlankBtn.disabled = state.running;
-  sendBtn.textContent = state.running ? 'Sending…' : 'Send queue';
+  sendBtn.textContent = state.running ? 'Sending…' : 'Send as one';
 }
 
 function buildWidget() {
@@ -280,7 +283,7 @@ function buildWidget() {
       <button id="mq-add-blank" class="mq-add-blank" type="button">+ Add plain question</button>
     </div>
     <div id="mq-actions">
-      <button class="mq-send" id="mq-send">Send queue</button>
+      <button class="mq-send" id="mq-send">Send as one</button>
       <button id="mq-cancel">Cancel</button>
       <button id="mq-clear">Clear</button>
     </div>
@@ -314,7 +317,7 @@ function buildWidget() {
   toggleBtn.addEventListener('click', toggle);
 
   render();
-  setStatus('Select text → click 📎 Quote → add question. Repeat. Then Send queue.');
+  setStatus('Select text → Ask ChatGPT → type your question. Repeat. Then Send → all rows go as one message.');
 }
 
 // ---------- Selection-capture floating button ----------

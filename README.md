@@ -1,8 +1,8 @@
 # Ask ChatGPT Multi
 
-Chrome extension that adds a floating **Multi-Ask** widget on chatgpt.com. Queue as many questions as you want, then hit **Send queue** — each one fires into the current chat as a normal follow-up, one after another.
+Chrome extension that adds a floating **Multi-Ask** widget on chatgpt.com. Stack as many quoted follow-ups as you want, then hit **Send as one** — every row goes into the current chat as a single combined message, so the assistant can address all of them in one reply.
 
-No side panel. No new tabs. No API key. Every question lands in the same conversation you're already in.
+No side panel. No new tabs. No API key. Everything lands in the conversation you're already in.
 
 ## Install (dev)
 
@@ -19,19 +19,23 @@ Then in Chrome:
 
 ## Use
 
-1. Type a question in the widget → **Add** (or ⌘/Ctrl+Enter)
-2. Repeat for as many as you want
-3. Click **Send queue**
-   - The extension types Q1 into the real composer, clicks Send, waits for the response to finish streaming, then sends Q2, and so on
-4. **Cancel** stops after the current question completes
+1. Select text in the chat → click the native **💬 Ask ChatGPT** popup (the extension intercepts it and adds a row to the widget with that quote pinned)
+2. Type your follow-up question for that row
+3. Select more text → **Ask ChatGPT** → next row → type its question
+4. Click **Send as one** — every row is combined into a single message (each quote as a markdown blockquote followed by its question) and sent to the current chat
+
+Other actions:
+- **+ Add plain question** for a row without a quote
+- **📎 Quote** button that floats next to any selection (backup for when the native popup doesn't show)
+- **⌘/Ctrl+Enter** inside any question input to send
 
 ## How it works
 
 - Content script runs only on `chatgpt.com` / `chat.openai.com`
-- To send: sets the composer text via `execCommand('insertText')` (works with ChatGPT's ProseMirror contenteditable) and clicks the page's own Send button
-- To know when to send the next one: watches the Stop button — when it disappears and the Send button re-enables, the assistant is done
+- Intercepts clicks on the native "Ask ChatGPT" popup so the selection is routed to our queue instead of overwriting the composer's single quote reference
+- On send: joins every pending row into one message, types it into ChatGPT's ProseMirror composer via `execCommand('insertText')`, then clicks the page's own Send button
 
 ## Fragility
 
-- Selectors (`data-testid="send-button"`, `data-testid="stop-button"`, `#prompt-textarea`) can change. If sends stop working, update the selectors in [src/content.ts](src/content.ts).
-- If an assistant response takes longer than 5 minutes, the wait times out — bump `timeoutMs` in `waitForResponseDone`.
+- Selectors (`data-testid="send-button"`, `data-testid="stop-button"`, `#prompt-textarea`, the "Ask ChatGPT" popup label) can change with chatgpt.com updates. If anything breaks, the one place to fix is the `find*` / `isNativeAskButton` helpers at the top of [src/content.ts](src/content.ts).
+- Long assistant replies can exceed the 5-minute wait — bump `timeoutMs` in `waitForResponseDone`.
