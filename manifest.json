@@ -1,8 +1,21 @@
 {
   "manifest_version": 3,
   "name": "Ask ChatGPT Multi",
-  "version": "0.2.0",
-  "description": "Queue multiple questions into the same ChatGPT conversation. They fire one after another into the current chat — no side panel, no API key.",
+  "version": "0.3.0",
+  "description": "Stack multiple quoted follow-ups into one ChatGPT message. Extends the built-in Ask ChatGPT popup — no API key.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Ask ChatGPT Multi"
+  },
   "host_permissions": ["https://chatgpt.com/*", "https://chat.openai.com/*"],
   "content_scripts": [
     {

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- ChatGPT green rounded square -->
+  <rect width="128" height="128" rx="28" fill="#10a37f"/>
+
+  <!-- Three stacked blockquote rows: vertical bar + line next to it -->
+  <!-- Row 1 -->
+  <rect x="28" y="34" width="6" height="20" rx="3" fill="#ffffff"/>
+  <rect x="42" y="40" width="58" height="8" rx="2" fill="#ffffff" opacity="0.92"/>
+
+  <!-- Row 2 -->
+  <rect x="28" y="62" width="6" height="20" rx="3" fill="#ffffff"/>
+  <rect x="42" y="68" width="48" height="8" rx="2" fill="#ffffff" opacity="0.92"/>
+
+  <!-- Row 3 -->
+  <rect x="28" y="90" width="6" height="20" rx="3" fill="#ffffff"/>
+  <rect x="42" y="96" width="40" height="8" rx="2" fill="#ffffff" opacity="0.92"/>
+</svg>
