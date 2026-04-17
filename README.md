@@ -6,6 +6,8 @@ A tiny Chrome extension that upgrades ChatGPT's built-in **"Ask ChatGPT"** popup
 
 No widget. No side panel. No API key. Works with your existing ChatGPT login.
 
+![Demo: selecting multiple passages and stacking them as quoted follow-ups in one ChatGPT message](docs/demo.gif)
+
 ---
 
 ## Why
