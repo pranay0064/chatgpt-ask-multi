@@ -172,7 +172,7 @@ So I built a tiny Chrome extension that fixes the one thing I wanted: **every ti
 - Not affiliated with OpenAI
 - Not a silver bullet — if chatgpt.com changes their composer selectors the extension breaks until someone PRs a fix (it's three lines, labeled in the code)
 
-**Install:** [Chrome Web Store link once approved] — or grab the zip from [the latest release](https://github.com/pranay0064/chatgpt-ask-multi/releases/latest) and Load Unpacked.
+**Install:** [Chrome Web Store](https://chromewebstore.google.com/detail/gfimipjodfpoeocpboomepjgmocigfjb) — one click — or grab the zip from [the latest release](https://github.com/pranay0064/chatgpt-ask-multi/releases/latest).
 
 **Repo:** https://github.com/pranay0064/chatgpt-ask-multi
 
