@@ -1,13 +1,13 @@
-// V2 — inline composer.
+// Inline composer — adds a floating "📎 Quote" button next to any text
+// selection on chatgpt.com. Clicking it appends the selection to the
+// existing composer as a markdown blockquote, followed by a blank line,
+// and leaves the cursor at the end — ready for the user to type their
+// comment. Repeating the flow stacks multiple quote+comment blocks
+// inside the composer; the user sends the whole thing manually when
+// ready.
 //
-// No widget. When the user selects text in the chat and clicks the native
-// "Ask ChatGPT" popup, we intercept it: the selection is appended to the
-// existing composer content as a markdown blockquote, followed by a blank
-// line, and the cursor is left at the end — ready for the user to type
-// their comment. Repeating the flow stacks multiple quote+comment blocks
-// inside the composer. The user sends the whole thing manually when ready.
-
-const log = (...args: unknown[]) => console.log('[MultiAsk]', ...args);
+// ChatGPT's own "Ask ChatGPT" popup is left completely alone — users who
+// want the native single-quote-reference pill still have it.
 
 function findComposer(): HTMLElement | null {
   return (
@@ -92,39 +92,10 @@ function appendQuoteToComposer(quote: string) {
   setComposerText(normalizeBlankLines(combined));
 }
 
-// ---------- Intercept chatgpt.com's native "Ask ChatGPT" popup ----------
-
-function isNativeAskButton(el: HTMLElement | null): boolean {
-  if (!el) return false;
-  const btn = el.closest('button, [role="button"]') as HTMLElement | null;
-  if (!btn) return false;
-  const label = (btn.textContent ?? '').replace(/\s+/g, ' ').trim();
-  // Match "Ask ChatGPT" exactly or with a leading glyph (» / 99 / etc).
-  return /^(?:[^\w\s]*\s*)?Ask ChatGPT$/i.test(label) && label.length < 40;
-}
-
-const interceptHandler = (e: MouseEvent | PointerEvent) => {
-  const target = e.target as HTMLElement | null;
-  if (!isNativeAskButton(target)) return;
-  const sel = window.getSelection();
-  const text = sel?.toString().trim() ?? '';
-  if (!text) return;
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  log('intercepted Ask ChatGPT →', text.slice(0, 60));
-  sel?.removeAllRanges();
-  appendQuoteToComposer(text);
-};
-
-// Capture phase on all three events so we beat chatgpt.com's own handler
-// no matter which one it uses to trigger the default quote behavior.
-['pointerdown', 'mousedown', 'click'].forEach((type) => {
-  document.addEventListener(type, interceptHandler as EventListener, { capture: true });
-});
-
-// ---------- Fallback: floating "📎 Quote" button near any selection ----------
-// If the native popup doesn't appear (e.g. selecting outside a ChatGPT message
-// bubble), this button lets the user still append to the composer.
+// ---------- Floating "📎 Quote" button near any selection ----------
+// The sole entry point: when the user highlights text anywhere on a
+// ChatGPT page, this button appears next to the selection. Clicking it
+// appends the selected text to the composer as a blockquote.
 
 let selectionBtn: HTMLButtonElement | null = null;
 

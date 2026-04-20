@@ -1,6 +1,6 @@
 {
   "name": "ask-chatgpt-multi",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Chrome extension to ask ChatGPT multiple questions about one piece of context, in parallel, using your existing chatgpt.com session.",
   "private": true,
   "type": "module",
