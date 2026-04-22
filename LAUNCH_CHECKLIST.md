@@ -1,201 +1,109 @@
 # Launch Checklist
 
-Reference doc for the Chrome Web Store submission and the Reddit launch. Copy-pasteable.
+Copy-pasteable reference for the Reddit launch. The Chrome Web Store listing is already live — this doc is now just the post.
+
+**Extension URL:** https://chromewebstore.google.com/detail/gfimipjodfpoeocpboomepjgmocigfjb
 
 ---
 
 ## ✅ What's done
 
-- [x] Icons generated (16 / 48 / 128 / 512 px) in `icons/`
-- [x] `manifest.json` wired with icons, tightened description
-- [x] Release zip `releases/ask-chatgpt-multi-v0.3.0.zip` (7 KB, includes icons)
-- [x] GitHub release **v0.3.0** published and publicly downloadable
-- [x] 3 listing screenshots captured
-- [x] Demo GIF recorded and optimized → `docs/demo.gif` (1.3 MB, 19.6 s)
-- [x] `PRIVACY.md` in the repo for the CWS privacy-policy URL
+- [x] Chrome Web Store listing **live** (v0.4.0 approved and published)
+- [x] Icons, privacy policy, screenshots, manifest — all shipped
+- [x] Demo GIF (`docs/demo.gif`, 1.3 MB, 19.6 s) — verified to show the Quote button being clicked
+- [x] Bug fix: native "Ask ChatGPT" popup is no longer hijacked
 
 ## ⏳ What's left
 
-- [ ] Part 5: Chrome Web Store submission (30–40 min form)
-- [ ] Part 6: Reddit post (after CWS approves — typically 1–5 business days)
+- [ ] Post to r/SideProject
+- [ ] Post to r/chrome_extensions (day 2, if first one lands well)
+- [ ] Post to r/ChatGPT (day 3, only if above two gained traction)
 
 ---
 
-# Part 5 — Chrome Web Store submission
-
-## Prerequisites
-
-1. A Google account (personal is fine).
-2. **$5 one-time developer fee** — paid at first submission.
-3. Everything listed under "What's done" above.
-
-## Step-by-step
-
-### 1. Register
-
-Go to <https://chrome.google.com/webstore/devconsole/>. Sign in. Pay the $5. One-time, per Google account.
-
-### 2. Create new item
-
-Click **New item** → upload `releases/ask-chatgpt-multi-v0.3.0.zip`. The console parses the manifest and shows you the name/version/icons it extracted.
-
-### 3. Fill the "Store listing" tab
-
-**Extension name** (≤ 45 chars):
-```
-Ask ChatGPT Multi
-```
-
-**Summary** (short description, ≤ 132 chars):
-```
-Stack multiple quoted follow-ups into one ChatGPT message. Extends the built-in Ask ChatGPT popup. No API key, no telemetry.
-```
-
-**Description** (detailed, max 16k chars — paste this as-is):
-
-```
-Ask ChatGPT Multi upgrades the "Ask ChatGPT" popup that appears when you select text in a ChatGPT reply.
-
-The built-in popup only quotes one passage at a time. If ChatGPT just gave you a six-bullet answer and you want to follow up on three of the bullets, you either send three separate messages (losing shared context) or paste quotes by hand.
-
-This extension fixes that one thing: every time you click "Ask ChatGPT", the selected passage is appended to the composer as a markdown blockquote, with the cursor on a fresh blank line. Type your comment, select another passage, click again — quotes stack. Send the whole thing when you're ready.
-
-HOW TO USE
-1. Select text in any ChatGPT reply.
-2. Click the built-in "Ask ChatGPT" popup.
-3. The composer now contains "> your quote" with the cursor below. Type your comment.
-4. Select more text. Ask ChatGPT again. The new quote stacks below.
-5. Hit Send when ready — the whole stacked message goes in one shot.
-
-PRIVACY
-• No API key required — uses your existing chatgpt.com session.
-• No data leaves your browser except to chatgpt.com (exactly what happens when you type a message by hand).
-• No analytics, no telemetry, no background requests.
-• Only runs on chatgpt.com and chat.openai.com. Does nothing on any other site.
-• Open source under MIT — the entire extension is ~150 lines of TypeScript, auditable in one file.
-
-SOURCE CODE
-https://github.com/pranay0064/chatgpt-ask-multi
-
-Not affiliated with, endorsed by, or sponsored by OpenAI.
-```
-
-**Category:** `Productivity`
-
-**Language:** `English (United States)`
-
-### 4. Upload images
-
-- **Store icon:** `icons/icon128.png` (the console may also ask for a larger 440×280 promo tile — you can skip it initially)
-- **Screenshots:** upload your three PNGs (the selection, one-quote, three-quotes shots)
-  - Chrome Web Store accepts **1280×800** or **640×400**. Either works; I verified yours are fine.
-
-### 5. "Privacy practices" tab
-
-**Single purpose:**
-```
-Extends the built-in "Ask ChatGPT" popup on chatgpt.com so it stacks multiple quoted passages into one composer message instead of replacing the single quote each time.
-```
-
-**Permission justifications:** for **host access** to `https://chatgpt.com/*` and `https://chat.openai.com/*`:
-```
-Required to run the content script that intercepts the "Ask ChatGPT" popup and writes the user's selected text into the ChatGPT composer as a markdown blockquote. The extension is inert on every other site.
-```
-
-(No other permissions are requested, so nothing else needs justifying. This is a genuine advantage — call it out in the description if the reviewer asks.)
-
-**Data usage:** tick **"I do not collect user data."** It's truthful — there is no fetch, no storage, no background page.
-
-**Privacy policy URL:**
-```
-https://github.com/pranay0064/chatgpt-ask-multi/blob/main/PRIVACY.md
-```
-
-### 6. "Distribution" tab
-
-- **Visibility:** **Unlisted** (launch mode — hidden from search; installable by anyone with the link)
-- **Regions:** All regions
-
-> **Why Unlisted first?** You get a one-click install link for the Reddit post without fighting for CWS search ranking or drawing an early takedown from OpenAI. Flip to **Public** after 2–4 weeks if installs and feedback are healthy.
-
-### 7. Submit for review
-
-Click **Submit for review** at the top. Typical wait for a first submission: 1–5 business days. You get email updates.
-
-If it's rejected, the email will say which policy was cited. Paste me the rejection text and I'll help draft the appeal.
-
----
-
-# Part 6 — Reddit launch
-
-**Wait until CWS approves** so the post's install link is one-click. Posting before approval forces Redditors to do the "download zip → unzip → Load unpacked" dance, and you'll lose half your install conversions.
+# Reddit post — v0.4.0 copy
 
 ## Pick the subreddits
 
-Post in this order, spaced ~1 day apart (never cross-post same-day — Reddit flags it):
+Post in this order, spaced **~24 hours apart** (same-day cross-posts get flagged):
 
-1. **r/SideProject** (first) — kind audience, rewards honesty. Good pressure test before the bigger subs.
+1. **r/SideProject** — kind audience, rewards honesty. Good pressure test.
 2. **r/chrome_extensions** — small but high-intent.
-3. **r/ChatGPT** (biggest reach, most noise) — wait until the first two lands well.
+3. **r/ChatGPT** — biggest reach, most noise. Only go here after the first two land.
 4. Optional: **r/OpenAI**, **r/productivity**
 
 ## Title
 
-Pick whichever voice fits you best; first is my top pick:
+Top pick first. Pick whichever sounds most like you:
 
-- `I got tired of ChatGPT's "Ask ChatGPT" button only letting me quote one thing, so I built a Chrome extension to stack them. Open source, no API key.`
-- `Chrome extension: stack multiple quoted follow-ups into one ChatGPT message (150 lines, MIT)`
-- `"Ask ChatGPT" but it lets you ask about 5 things at once — open-source Chrome extension`
+- `Tiny Chrome extension I built to stack multiple quoted follow-ups into one ChatGPT message. Open source, no API key.`
+- `Chrome extension: select text in a ChatGPT reply, click Quote, repeat, stack, send (150 lines, MIT, open source)`
+- `I wanted to ask ChatGPT follow-ups about 3 things at once. So I built this Chrome extension.`
 
-## Body
+## Body (paste as-is)
 
 ```markdown
-You know the little 💬 **Ask ChatGPT** popup that appears when you select text in a ChatGPT reply? It's genuinely useful — it quotes the passage, drops the cursor in the composer, you type your follow-up.
+You know the little 💬 **Ask ChatGPT** popup that appears when you select text in a ChatGPT reply? It's useful, but it only quotes **one** passage — click it twice and the second quote replaces the first.
 
-Problem: it only works for **one** passage. If ChatGPT just gave me a 6-bullet list and I want to ask about three of the bullets, I have three bad choices:
-- Send three separate follow-ups (loses the shared context)
-- Paste quotes by hand (tedious and the markdown-in-composer is fiddly)
-- Just ask about one bullet and pretend the others didn't matter
+If ChatGPT just gave me a 6-bullet answer and I want to follow up on three bullets together, my choices were:
+- Send three separate messages (loses the shared context)
+- Paste the quotes by hand (tedious; markdown in the composer is fiddly)
+- Just ask about one bullet and drop the others
 
-So I built a tiny Chrome extension that fixes the one thing I wanted: **every time you click "Ask ChatGPT", it stacks a new quote into the composer instead of replacing the last one.** Cursor lands on a blank line so you type your comment, quote again, type, quote again, type, then hit Send — the whole thing goes as one message.
+So I built a tiny Chrome extension. It adds a small green **📎 Quote** button next to any text you highlight on chatgpt.com. Click it — the selection appends to the composer as a markdown blockquote and the cursor lands on a fresh blank line. Type your comment. Select another passage. Click Quote again. It stacks below. Keep going. Hit Send when ready — the whole thing goes as one message, and ChatGPT addresses all of them together.
+
+ChatGPT's own "Ask ChatGPT" popup is left completely alone — if you want the native single-quote behavior, use that. If you want to stack, use the Quote button.
 
 ![demo](https://raw.githubusercontent.com/pranay0064/chatgpt-ask-multi/main/docs/demo.gif)
 
 **What it is:**
-- ~150 lines of TypeScript in one file, auditable
+- ~145 lines of TypeScript in one file, auditable
 - No API key — uses your normal chatgpt.com session
 - No servers, no analytics, no background requests
-- Only runs on chatgpt.com
+- Only runs on chatgpt.com and chat.openai.com
 - MIT licensed
 
 **What it isn't:**
 - Not affiliated with OpenAI
-- Not a silver bullet — if chatgpt.com changes their composer selectors the extension breaks until someone PRs a fix (it's three lines, labeled in the code)
+- Not a silver bullet — if chatgpt.com changes their composer selector the extension breaks until someone PRs a fix (it's one function, labeled in the code)
 
-**Install:** [Chrome Web Store](https://chromewebstore.google.com/detail/gfimipjodfpoeocpboomepjgmocigfjb) — one click — or grab the zip from [the latest release](https://github.com/pranay0064/chatgpt-ask-multi/releases/latest).
+**Install (one click):** https://chromewebstore.google.com/detail/gfimipjodfpoeocpboomepjgmocigfjb
 
-**Repo:** https://github.com/pranay0064/chatgpt-ask-multi
+**Source:** https://github.com/pranay0064/chatgpt-ask-multi
 
 Star if it's useful, PRs welcome, roast away in comments if you hate it.
 ```
 
+---
+
 ## First-hour tactics
 
-Reddit's algorithm weights engagement in the first 30–60 minutes disproportionately:
+Reddit weights the first 30–60 minutes disproportionately. Plan around that:
 
-1. **Post at a good time:** 9–11 AM ET on a weekday for US-heavy subs like r/ChatGPT. Check the sub's own active-hours with `https://subredditstats.com/r/chatgpt`.
-2. **Pin the top comment yourself** — a short "Here's the one file that does all the work: [link to content.ts](https://github.com/pranay0064/chatgpt-ask-multi/blob/main/src/content.ts)" gives code-curious readers an immediate payoff and boosts engagement.
+1. **Time the post.** For US-heavy subs (r/ChatGPT, r/SideProject): **9–11 AM Eastern** on a weekday. Indian time: 18:30–20:30 IST. Avoid weekends — engagement drops.
+2. **Pin the top comment yourself** within the first 2 minutes. Suggested:
+   > Here's the one file that does all the work: https://github.com/pranay0064/chatgpt-ask-multi/blob/main/src/content.ts — 145 lines, one function per concern, zero dependencies. If chatgpt.com ever changes their composer selector, it's a two-line fix.
 3. **Reply to every question in the first two hours.** Upvotes track reply velocity.
-4. **Don't respond to trolls.** Ignore them; comments drag a post down fastest by triggering mod review.
+4. **Don't respond to trolls.** Ignoring is faster than arguing; comments drag a post down fastest by triggering mod review.
 
-## If it takes off
+## If a post gets rejected by automod
 
-- Bump the version and add any requested features on `main` (keeping each feature narrow — people clone for the 150-line charm).
-- Turn CWS listing **Public** after ~2 weeks of stability.
-- If someone files a bug that selectors broke, prioritize — that's the one class of issue that kills user trust fastest.
+Common reasons in these subs:
+- **Account too new** — r/ChatGPT often requires account age > 30 days and some karma. Start in r/SideProject if your main account is new.
+- **Self-promotion ratio** — some subs want 9 non-promo comments per 1 promo post. Comment in other threads before you post.
+- **No screenshot/GIF** — post gets auto-removed. The GIF in the body should cover this; if automod still flags it, add a top-level comment with just the CWS screenshot.
 
-## If it flops
+## If a post flops
 
-- Don't repost to the same sub. Shadow-ban risk.
-- Try a different sub with a different angle (r/productivity frames this as "less typing," r/ChatGPTPro frames it as "fewer API round-trips," etc.).
-- Or just let it sit; 90% of useful small utilities live quietly on GitHub and accrue users over years.
+- **Don't repost to the same sub for at least 30 days** — shadow-ban risk.
+- Try a different sub with a different angle: r/productivity frames this as "less typing," r/ChatGPTPro as "fewer round-trips," r/learnprogramming as "here's a 150-line Chrome MV3 extension that does one thing well."
+- Or let it sit. 90% of useful utilities accrue users quietly over years. The CWS listing earns installs from people searching the store independently of any Reddit hit.
+
+---
+
+## After the launch — things to watch
+
+- **GitHub issues** — if anyone reports "selectors broken," that's the most time-sensitive bug class. Fix within a day if possible; it's the one thing that kills user trust fastest.
+- **CWS dashboard** — weekly active users, review stars. If you get a 1-star review with a specific complaint, reply to it.
+- **OpenAI ToS action** — unlikely, but if CWS emails you about a trademark claim, reply calmly and offer to rename (e.g. "Stack Quote for ChatGPT"). Don't fight it.
+- **v0.5.0 ideas** — keyboard shortcut to quote without clicking, remove-individual-quote-block from the composer, Firefox port. Keep each new feature narrow.
